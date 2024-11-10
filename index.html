@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Handy Tool</title>
+	<script>
+		function getUserInput(){
+			let userInput = document.getElementById("userInput").value;
+			return userInput;
+		}
+
+		function displayStringInfo(str = "") {	
+			document.getElementById("strLow").innerHTML = str.toLowerCase();
+			document.getElementById("strUpp").innerHTML = str.toUpperCase();
+			document.getElementById("strLen").innerHTML = str.length;
+		}
+
+		function copyLowerCaseString(){
+			navigator.clipboard.writeText(getUserInput().toLowerCase());
+		}
+
+		function copyUpperCaseString(){
+			navigator.clipboard.writeText(getUserInput().toUpperCase());
+		}
+
+		function getRUIDs(){
+			let ruidsInput = document.getElementById("RUIDsInput").value;
+			return ruidsInput;
+		}
+
+		function separateString(inputString) {
+			let noSpaceString = '';
+			
+			for (let i = 0; i < inputString.length; i++) {
+			if (inputString[i] !== ' ') {
+				noSpaceString += inputString[i];
+				}
+			}
+
+			const chunks = [];
+			for (let i = 0; i < noSpaceString.length; i += 7) {
+				chunks.push(noSpaceString.substring(i, i + 7));
+			}
+		  	return chunks;
+		}
+
+		function displayRUIDs(values){
+			let result = separateString(values);
+			
+			const outputDiv = document.getElementById('output');
+		
+			result.forEach(chunk => {
+				const val = document.createElement('div');
+				val.textContent = chunk;
+				outputDiv.appendChild(val);
+			});
+
+			document.getElementById("numberOfRUIDs").innerHTML = result.length;
+		}
+
+		function resetRUIDs(){
+			document.getElementById("RUIDsInput").value = "";
+			document.getElementById("output").innerHTML = "";
+			document.getElementById("numberOfRUIDs").innerHTML = 0;
+		}
+
+		function displayUniqueResults(result) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; 
+
+            result.forEach(chunk => {
+                const newRUID = document.createElement('div');
+                newRUID.textContent = chunk;
+                resultDiv.appendChild(newRUID);
+            });
+        }
+
+        function compareArrays(a, b) {
+            const c = [];
+            for (let i = 0; i < a.length; i++) {
+                if (!b.includes(a[i])) {
+                    c.push(a[i]);
+                }
+            }
+            return c;
+        }
+
+        function compareArraysButton() {
+            const input1 = document.getElementById('input1').value;
+            const input2 = document.getElementById('input2').value;
+
+            const array1 = separateString(input1);
+            const array2 = separateString(input2);
+
+            const uniqueTo1 = compareArrays(array1, array2);
+            displayUniqueResults(uniqueTo1);
+        }
+	</script>
+</head>
+<body>
+	<header>
+	</header>
+	<main style="overflow: hidden;">
+		<h2 style="text-align: center;">String characteristics</h2>
+		<div>
+			<p>Type the word, expression or string of characters you want to analyze</p>
+			<input type="text" id="userInput" onkeyup="displayStringInfo(getUserInput())">
+		</div>
+		<div>
+			<ul>
+				<li style="padding-top: 6px;padding-right: 6px;">String in lower case : <span id="strLow"></span><button style="margin-left: 3px;" onclick="copyLowerCaseString()">Copy</button></li>
+				<li style="padding-top: 6px;padding-right: 6px;">String in upper case : <span id="strUpp"></span><button style="margin-left: 3px;" onclick="copyUpperCaseString()">Copy</button></li>
+				<li style="padding-top: 6px;padding-right: 6px;">String length : <span id="strLen"></span></li>
+			</ul>
+		</div>
+		<div>
+			<h2 style="text-align: center;">RU IDs list</h2>
+			<p>Enter the RU IDs you need to sort</p>
+			<textarea id="RUIDsInput"></textarea>
+			<p>Number of RU IDs : <span id="numberOfRUIDs"></span></p>
+			<button style="margin-left: 6px;" onclick="displayRUIDs(getRUIDs())">Display</button>
+			<button style="margin-left: 6px;" onclick="resetRUIDs()">Reset</button>
+			<div id="output"></div>
+		</div>
+		<div>
+			<h2 style="text-align: center;">Compare Arrays</h2>
+			<textarea id="input1" rows="5" cols="30"></textarea>
+    		<textarea id="input2" rows="5" cols="30"></textarea>
+    		<button onclick="compareArraysButton()">Compare</button>
+    		<div id="result"></div>
+		</div>
+	</main>
+</body>
+</html>
